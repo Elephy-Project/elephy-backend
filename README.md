@@ -6,8 +6,8 @@
 ### 2. Activate the environment
 `. env/bin/activate`
 
-### 3. Install Flask
-`pip install Flask`
+### 3. Install requirements
+`pip install -r requirements.txt`
 
 
 ## Run application

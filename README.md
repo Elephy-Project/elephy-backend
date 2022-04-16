@@ -11,9 +11,7 @@
 
 
 ## Run application
-get into app directory
-`cd app` then
-`uvicorn main:app --reload`
+`python3 main.py`
 
 ## UI Interface
 Visit 

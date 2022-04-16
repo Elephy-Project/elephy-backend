@@ -14,3 +14,7 @@
 get into app directory
 `cd app` then
 `uvicorn main:app --reload`
+
+## UI Interface
+Visit 
+`http://127.0.0.1:8000/docs/` or `http://127.0.0.1:8000/redoc`

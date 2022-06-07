@@ -1,58 +1,25 @@
 """A Class for connecting to USER RECORDS database"""
-import psycopg2
-import psycopg2.extras
+import database_connection
 import json
-from dotenv import dotenv_values
 
-config = dotenv_values(".env")
-psycopg2.extras.register_uuid()
-
+connection = database_connection.DatabaseConnection().get_db_cursor()
+cur = connection.cursor()
 
 def to_json(params):
-    response = {}
-    for i in params:
-        new_dict = {
-            str(i[0]): {
-                "date": i[1],
-                "informant": i[2],
-                "elephant_name": i[3],
-                "location": i[4],
-            }
+    response = []
+    for each_record in params:
+        record = {
+            "id": each_record[0],
+            "datetime": str(each_record[1]),
+            "informant": each_record[2],
+            "elephantname": each_record[3],
+            "location": each_record[4]
         }
-        response.update(new_dict)
+        response.append(record)
     return json.dumps(response)
 
 
 class DatabaseHandler:
-
-    def __init__(self):
-        self.DATABASE_URL = config["DATABASE_URL"]
-        self.USER = config["PGUSER"]
-        self.PASSWORD = config["PGPASSWORD"]
-        self.PORT = config["PGPORT"]
-        self.DATABASE = config["PGDATABASE"]
-        self.HOST = config["PGHOST"]
-        self.db_cursor = None
-
-    def get_db_cursor(self):
-        """
-        Connect to the database.
-
-        Returns:
-
-        """
-        # try:
-        return psycopg2.connect(
-            dbname=self.DATABASE,
-            user=self.USER,
-            password=self.PASSWORD,
-            host=self.HOST,
-            port=self.PORT
-        )
-        #     print("successfully connect to the database")
-        # except Exception as e:
-        #     SystemError("A problem happens during the db connection", e)
-        #     exit(1)
 
     def get_elephants_records_db(self):
         """
@@ -61,13 +28,11 @@ class DatabaseHandler:
         Returns:
             collections of elephant tracking records
         """
-        # with self.get_db_cursor() as cs:
-        #     cs.execute(
-        cur = self.get_db_cursor().cursor()
         cur.execute(
-                """SELECT * FROM elephant_records"""
+                """SELECT * FROM ElephantRecords"""
             )
         return to_json(cur.fetchall())
+        # return cur.fetchall()
 
     def get_specific_record(self, elephant_name):
         """
@@ -79,12 +44,11 @@ class DatabaseHandler:
         Returns:
             a json record of requested record_number
         """
-        # elephant_name = str(elephant_name)
-        cur = self.get_db_cursor().cursor()
+        print(elephant_name)
         cur.execute(
                 """SELECT * 
-                    FROM elephant_records
-                    WHERE elephant_name = %s
+                    FROM ElephantRecords
+                    WHERE elephantname = %s
                 """, elephant_name
             )
         return to_json([cur.fetchone()])
@@ -99,13 +63,13 @@ class DatabaseHandler:
         Returns:
             a json record that has been saved to db
         """
-        cur = self.get_db_cursor().cursor()
         cur.execute(
             """
-            INSERT INTO elephant_records (id, datetime, informant, elephant_name, location)
-            VALUES (%s, %s, %s, %s, %s)
-            """, (record.id, record.datetime, record.informant, record.elephant_name, record.location)
+            INSERT INTO elephantrecords (informant, elephantname, location)
+            VALUES (%s, %s, %s)
+            """, (record.informant, record.elephantname, record.location)
         )
+        connection.commit()
         return record
 
 

@@ -15,7 +15,6 @@ def get_elephants_records():
     Get the records of elephant from the database
     """
     data = db.get_elephants_records_db()
-
     return Response(content=data, media_type="application/json")
 
 

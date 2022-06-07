@@ -1,52 +1,25 @@
 """A Class for connecting to CAMERA RECORDS database"""
-import psycopg2
+import database_connection
 import json
-from dotenv import dotenv_values
 
-
-config = dotenv_values(".env")
-
+connection = database_connection.DatabaseConnection().get_db_cursor()
+cur = connection.cursor()
 
 def to_json(params):
-    response = {}
-    for i in params:
-        new_dict = {
-            str(i[0]): {
-                "date": i[1],
-                "camera_id": i[2],
-                "elephant_name": i[3],
-                "location": i[4],
-            }
+    response = []
+    for each_record in params:
+        record = {
+            "id": each_record[0],
+            "datetime": str(each_record[1]),
+            "cameraid": each_record[2],
+            "elephantname": each_record[3],
+            "location": each_record[4],
         }
-        response.update(new_dict)
+        response.append(record)
     return json.dumps(response)
 
 
 class CameraDatabaseHandler:
-
-    def __init__(self):
-        self.DATABASE_URL = config["CAMERA_DB_DATABASE_URL"]
-        self.USER = config["CAMERA_DB_PGUSER"]
-        self.PASSWORD = config["CAMERA_DB_PGPASSWORD"]
-        self.PORT = config["CAMERA_DB_PGPORT"]
-        self.DATABASE = config["CAMERA_DB_PGDATABASE"]
-        self.HOST = config["CAMERA_DB_PGHOST"]
-        self.db_cursor = None
-
-    def get_db_cursor(self):
-        """
-        Connect to the database for camera.
-
-        Returns:
-            cursor to the database.
-        """
-        return psycopg2.connect(
-            dbname=self.DATABASE,
-            user=self.USER,
-            password=self.PASSWORD,
-            host=self.HOST,
-            port=self.PORT
-        )
 
     def get_elephants_records_from_camera(self):
         """
@@ -55,11 +28,8 @@ class CameraDatabaseHandler:
         Returns:
             collection of elephant tracking records sent by camera.
         """
-        # with self.get_db_cursor() as cs:
-        #     cs.execute(
-        cur = self.get_db_cursor().cursor()
         cur.execute(
-                """SELECT * FROM elephant_records_camera"""
+                """SELECT * FROM elephantrecordscamera"""
             )
         return to_json(cur.fetchall())
 
@@ -73,11 +43,10 @@ class CameraDatabaseHandler:
         Returns:
             a json record of requested elephant_name
         """
-        cur = self.get_db_cursor().cursor()
         cur.execute(
                 """SELECT * 
-                    FROM elephant_records_camera
-                    WHERE camera_id=(%s)
+                    FROM elephantrecordscamera
+                    WHERE cameraid=(%s)
                 """, camera_number
             )
         return to_json([cur.fetchone()])
@@ -93,11 +62,11 @@ class CameraDatabaseHandler:
         Returns:
             a json record that has been saved to db
         """
-        cur = self.get_db_cursor().cursor()
         cur.execute(
             """
-            INSERT INTO elephant_records_camera (id, datetime, camera_id, elephant_name, location)
-            VALUES (%s, %s, %s, %s, %s)
-            """, (record.id, record.datetime, record.camera_id, record.elephant_name, record.location)
+            INSERT INTO elephantrecordscamera (cameraid, elephantname, location)
+            VALUES (%s, %s, %s)
+            """, (record.cameraid, record.elephantname, record.location)
         )
+        connection.commit()
         return record

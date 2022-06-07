@@ -1,8 +1,7 @@
 import psycopg2
 import psycopg2.extras
-from dotenv import dotenv_values
+from decouple import config
 
-config = dotenv_values(".env")
 
 class DatabaseConnection(object):
 
@@ -13,12 +12,12 @@ class DatabaseConnection(object):
     
 
     def __init__(self):
-        self.DATABASE_URL = config["DATABASE_URL"]
-        self.USER = config["PGUSER"]
-        self.PASSWORD = config["PGPASSWORD"]
-        self.PORT = config["PGPORT"]
-        self.DATABASE = config["PGDATABASE"]
-        self.HOST = config["PGHOST"]
+        self.DATABASE_URL = config("DATABASE_URL")
+        self.USER = config("PGUSER")
+        self.PASSWORD = config("PGPASSWORD")
+        self.PORT = config("PGPORT")
+        self.DATABASE = config("PGDATABASE")
+        self.HOST = config("PGHOST")
         self.db_cursor = None
 
 

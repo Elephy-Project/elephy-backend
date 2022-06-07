@@ -5,6 +5,7 @@ from decouple import config
 
 class DatabaseConnection(object):
 
+    # for Singleton object
     def __new__(cls):
         if not hasattr(cls, 'instance'):
             cls.instance = super(DatabaseConnection, cls).__new__(cls)
@@ -26,11 +27,8 @@ class DatabaseConnection(object):
         Connect to the database.
 
         Returns:
-
+                connection to database
         """
-        # print("connect to db")
-        # try:
-        #     print("successfully connect to the database")
         return psycopg2.connect(
             dbname=self.DATABASE,
             user=self.USER,
@@ -38,8 +36,4 @@ class DatabaseConnection(object):
             host=self.HOST,
             port=self.PORT
         )
-        # except Exception as e:
-        #     SystemError("A problem happens during the db connection", e)
-        #     exit(1)
-    
     

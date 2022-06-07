@@ -6,6 +6,15 @@ connection = database_connection.DatabaseConnection().get_db_cursor()
 cur = connection.cursor()
 
 def to_json(params):
+    """
+    Convert response from db from list to JSON
+
+    Args:
+        params: reponse from db in list form
+
+    Returns:
+            Response from db in JSON form
+    """
     response = []
     for each_record in params:
         record = {

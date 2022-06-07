@@ -11,7 +11,7 @@
 
 
 ## Run application
-`python3 main.py`
+`uvicorn --port 8000 --host 127.0.0.1 main:app --reload`
 
 ## UI Interface
 Visit 

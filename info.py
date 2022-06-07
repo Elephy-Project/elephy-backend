@@ -61,8 +61,3 @@ async def post_elephant_record_from_camera(record: CameraRecord):
     Send a record of elephant to the camera database
     """
     return cdb.post_elephant_record_from_camera(record)
-
-if __name__ == '__main__':
-    # print(db)
-    result = get_elephants_records()
-    print(result)

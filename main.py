@@ -8,7 +8,7 @@ from fastapi.responses import RedirectResponse
 app = FastAPI()
 app.include_router(info.router)
 
-@app.get("/")
+@app.get("/", include_in_schema=False)
 def root():
   return RedirectResponse("/docs")
 

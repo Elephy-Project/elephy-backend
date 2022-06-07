@@ -35,21 +35,21 @@ class CameraDatabaseHandler:
 
     def get_specific_record_from_camera(self, camera_number):
         """
-        Get the specific record of elephant tracking sent by camera
+        Get the specific record of elephant tracking sent by camera_number
 
         Args:
-            camera_number: record id to get the info
+            camera_number: camera id to get the info
 
         Returns:
-            a json record of requested elephant_name
+            a json record of requested camera id
         """
         cur.execute(
                 """SELECT * 
                     FROM elephantrecordscamera
-                    WHERE cameraid=(%s)
-                """, camera_number
+                    WHERE cameraid = %s
+                """, (camera_number,)
             )
-        return to_json([cur.fetchone()])
+        return to_json(cur.fetchall())
         # return cur.fetchone()
 
     def post_elephant_record_from_camera(self, record):

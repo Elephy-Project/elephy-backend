@@ -29,29 +29,28 @@ class DatabaseHandler:
             collections of elephant tracking records
         """
         cur.execute(
-                """SELECT * FROM ElephantRecords"""
+                """SELECT * FROM elephantrecords"""
             )
         return to_json(cur.fetchall())
         # return cur.fetchall()
 
     def get_specific_record(self, elephant_name):
         """
-        Get the specific record of elephant tracking
+        Get all records of the elephant name whose name is elephant_name.
 
         Args:
-            elephant_name: record id to get the info
+            elephant_name: elephant name to get the info
 
         Returns:
-            a json record of requested record_number
+            a json record of requested elephant_name
         """
-        print(elephant_name)
         cur.execute(
                 """SELECT * 
-                    FROM ElephantRecords
+                    FROM elephantrecords
                     WHERE elephantname = %s
-                """, elephant_name
+                """, (elephant_name,)
             )
-        return to_json([cur.fetchone()])
+        return to_json(cur.fetchall())
 
     def post_elephant_record(self, record):
         """
@@ -71,16 +70,3 @@ class DatabaseHandler:
         )
         connection.commit()
         return record
-
-
-# if __name__ == '__main__':
-#     db = DatabaseHandler()
-#     result = await db.get_elephants_records_db()
-#     print(result)
-# {
-#   "id": "80ef9d71-6fde-4adf-b414-5d103bf6f81d",
-#   "datetime": "2022-04-26T19:11:27.422Z",
-#   "informant": "admin",
-#   "elephant_name": "test",
-#   "location": "f01"
-# }

@@ -1,5 +1,5 @@
 fastapi==0.75.2
 uvicorn==0.17.6
-psycopg2~=2.9.2
+psycopg2-binary
 python-decouple==3.6
 gunicorn==20.1.0

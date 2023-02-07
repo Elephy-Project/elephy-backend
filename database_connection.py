@@ -13,7 +13,7 @@ class DatabaseConnection(object):
     
 
     def __init__(self):
-        self.DATABASE_URL = config("DATABASE_URL")
+        # self.DATABASE_URL = config("DATABASE_URL")
         self.USER = config("PGUSER")
         self.PASSWORD = config("PGPASSWORD")
         self.PORT = config("PGPORT")

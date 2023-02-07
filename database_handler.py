@@ -21,7 +21,7 @@ def to_json(params):
             "id": each_record[0],
             "datetime": str(each_record[1]),
             "informant": each_record[2],
-            "elephantname": each_record[3],
+            "elephant_name": each_record[3],
             "location": each_record[4]
         }
         response.append(record)
@@ -38,7 +38,7 @@ class DatabaseHandler:
             collections of elephant tracking records
         """
         cur.execute(
-                """SELECT * FROM elephantrecords"""
+                """SELECT * FROM human_record"""
             )
         return to_json(cur.fetchall())
         # return cur.fetchall()
@@ -55,9 +55,9 @@ class DatabaseHandler:
         """
         cur.execute(
                 """SELECT * 
-                    FROM elephantrecords
-                    WHERE elephantname = %s
-                """, (elephant_name,)
+                    FROM human_record INNER JOIN camera_record ON 1=1 
+                    WHERE human_record.elephant_name = %s or camera_record.elephant_name = %s
+                """, (elephant_name, elephant_name)
             )
         return to_json(cur.fetchall())
 
@@ -73,9 +73,9 @@ class DatabaseHandler:
         """
         cur.execute(
             """
-            INSERT INTO elephantrecords (informant, elephantname, location)
+            INSERT INTO human_record (informant, elephant_name, location)
             VALUES (%s, %s, %s)
-            """, (record.informant, record.elephantname, record.location)
+            """, (record.informant, record.elephant_name, record.location)
         )
         connection.commit()
         return record

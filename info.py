@@ -61,3 +61,8 @@ async def post_elephant_record_from_camera(record: CameraRecord):
     Send a record of elephant to the camera database
     """
     return cdb.post_elephant_record_from_camera(record)
+
+
+@router.post("/info-camera-test")
+async def post_elephant_record_from_camera_test(record: CameraRecord):
+    return record

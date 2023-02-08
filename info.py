@@ -48,7 +48,7 @@ def get_specific_record_from_camera(camera_id):
 
 
 @router.post("/record")
-async def post_elephant_record_by_human(record: Record):
+async def post_elephant_record(record: Record):
     """
     Send a record of elephant to the database
     """

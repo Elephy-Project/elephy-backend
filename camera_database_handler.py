@@ -21,8 +21,8 @@ def to_json(params):
             "id": each_record[0],
             "datetime": str(each_record[1]),
             "camera_id": each_record[2],
-            "elephant_name": each_record[3],
-            "location": each_record[4],
+            "location_lat": each_record[3],
+            "location_long": each_record[4],
         }
         response.append(record)
     return json.dumps(response)
@@ -30,52 +30,52 @@ def to_json(params):
 
 class CameraDatabaseHandler:
 
-    def get_elephants_records_from_camera(self):
+    def get_all_camera(self):
         """
-        Get elephant tracking record captured by camera from the db.
+        Get all cameras data
 
         Returns:
-            collection of elephant tracking records sent by camera.
+            collection of cameras.
         """
         cur.execute(
-                """SELECT * FROM camera_record"""
+                """SELECT * FROM camera"""
             )
         return to_json(cur.fetchall())
 
-    def get_specific_record_from_camera(self, camera_number):
+    def get_specific_camera(self, camera_id):
         """
-        Get the specific record of elephant tracking sent by camera_number
+        Get the specific data of camera
 
         Args:
-            camera_number: camera id to get the info
+            camera_id: camera id to get the info
 
         Returns:
             a json record of requested camera id
         """
         cur.execute(
                 """SELECT * 
-                    FROM camera_record
+                    FROM camera
                     WHERE camera_id = %s
-                """, (camera_number,)
+                """, (camera_id,)
             )
         return to_json(cur.fetchall())
         # return cur.fetchone()
 
-    def post_elephant_record_from_camera(self, record):
+    def post_new_camera(self, camera):
         """
-        Post a record to camera db
+        Post a camera information to camera db
 
         Args:
-            record: record to post to db
+            camera: camera information to insert to db
 
         Returns:
             a json record that has been saved to db
         """
         cur.execute(
             """
-            INSERT INTO camera_record (camera_id, elephant_name, location)
+            INSERT INTO camera (camera_id, location_lat, location_long)
             VALUES (%s, %s, %s)
-            """, (record.camera_id, record.elephant_name, record.location)
+            """, (camera.camera_id, camera.location_lat, camera.location_long)
         )
         connection.commit()
-        return record
+        return camera

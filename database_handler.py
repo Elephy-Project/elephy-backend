@@ -10,7 +10,7 @@ def to_json(params):
     Convert response from db from list to JSON
 
     Args:
-        params: reponse from db in list form
+        params: response from db in list form
 
     Returns:
             Response from db in JSON form
@@ -21,8 +21,8 @@ def to_json(params):
             "id": each_record[0],
             "datetime": str(each_record[1]),
             "informant": each_record[2],
-            "elephant_name": each_record[3],
-            "location": each_record[4]
+            "location_lat": each_record[3],
+            "location_long": each_record[4]
         }
         response.append(record)
     return json.dumps(response)
@@ -38,32 +38,32 @@ class DatabaseHandler:
             collections of elephant tracking records
         """
         cur.execute(
-                """SELECT * FROM human_record"""
+                """SELECT * FROM record"""
             )
         return to_json(cur.fetchall())
         # return cur.fetchall()
 
-    def get_specific_record(self, elephant_name):
+    def get_specific_record_by_informant(self, informant):
         """
-        Get all records of the elephant name whose name is elephant_name.
+        Get all records of the informant name whose name is .
 
         Args:
-            elephant_name: elephant name to get the info
+            informant: informant name to get the info
 
         Returns:
             a json record of requested elephant_name
         """
         cur.execute(
                 """SELECT * 
-                    FROM human_record INNER JOIN camera_record ON 1=1 
-                    WHERE human_record.elephant_name = %s or camera_record.elephant_name = %s
-                """, (elephant_name, elephant_name)
+                    FROM record
+                    WHERE informant = %s
+                """, (informant,)
             )
         return to_json(cur.fetchall())
 
-    def post_elephant_record(self, record):
+    def post_elephant_record_by_human(self, record):
         """
-        Post the specific record to the db
+        Post the specific record to the db, sender is human
 
         Args:
             record: record to post to db
@@ -73,9 +73,28 @@ class DatabaseHandler:
         """
         cur.execute(
             """
-            INSERT INTO human_record (informant, elephant_name, location)
+            INSERT INTO record (informant, location_lat, location_long)
             VALUES (%s, %s, %s)
-            """, (record.informant, record.elephant_name, record.location)
+            """, (record.informant, record.location_lat, record.location_long)
+        )
+        connection.commit()
+        return record
+
+    def post_elephant_record_by_camera(self, record):
+        """
+        Post the specific record to the db, sender is camera
+
+        Args:
+            record: record to post to db
+
+        Returns:
+            a json record that has been saved to db
+        """
+        cur.execute(
+            """
+            INSERT INTO record (informant)
+            VALUES (%s)
+            """, (record.informant,)
         )
         connection.commit()
         return record

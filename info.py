@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Response
 from database_handler import DatabaseHandler
 from camera_database_handler import CameraDatabaseHandler
-from schema import Record, CameraRecord
+from schema import Record, Camera
 
 router = APIRouter()
 
@@ -19,50 +19,53 @@ def get_elephants_records():
 
 
 @router.get("/info-camera")
-def get_elephants_records_from_camera():
+def get_data_camera():
     """
-    Get the records of elephant from the camera database
+    Get the records of camera information
     """
-    data = cdb.get_elephants_records_from_camera()
+    data = cdb.get_all_camera()
 
     return Response(content=data, media_type="application/json")
 
 
-@router.get("/info/{elephant_name}")
-def get_specific_record(elephant_name):
+@router.get("/info/{informant_name}")
+def get_specific_record(informant_name):
     """
-    Get the specific record of elephant from db
+    Get the specific record of elephant from db using informant_name
 
     """
-    response = db.get_specific_record(elephant_name)
+    response = db.get_specific_record_by_informant(informant_name)
     return Response(content=response, media_type="application/json")
 
 
-@router.get("/info-camera/{camera_number}")
-def get_specific_record_from_camera(camera_number):
+@router.get("/info-camera/{camera_id}")
+def get_specific_record_from_camera(camera_id):
     """
-    Get the specific record of elephant from camera db
+    Get the specific record of camera data from camera db
     """
-    response = cdb.get_specific_record_from_camera(camera_number)
+    response = cdb.get_specific_camera(camera_id)
     return Response(content=response, media_type="application/json")
 
 
-@router.post("/info")
-async def post_elephant_record(record: Record):
+@router.post("/record-by-human")
+async def post_elephant_record_by_human(record: Record):
     """
     Send a record of elephant to the database
     """
-    return db.post_elephant_record(record)
+    return db.post_elephant_record_by_human(record)
+
+
+@router.post("/record-by-camera")
+async def post_elephant_record_by_camera(record: Record):
+    """
+    Send a record of elephant to the database
+    """
+    return db.post_elephant_record_by_camera(record)
 
 
 @router.post("/info-camera")
-async def post_elephant_record_from_camera(record: CameraRecord):
+async def post_new_camera(record: Camera):
     """
-    Send a record of elephant to the camera database
+    Add new camera to database
     """
-    return cdb.post_elephant_record_from_camera(record)
-
-
-@router.post("/info-camera-test")
-async def post_elephant_record_from_camera_test(record: CameraRecord):
-    return record
+    return cdb.post_new_camera(record)

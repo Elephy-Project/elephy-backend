@@ -61,7 +61,7 @@ class DatabaseHandler:
             )
         return to_json(cur.fetchall())
 
-    def post_elephant_record_by_human(self, record):
+    def post_elephant_record(self, record):
         """
         Post the specific record to the db, sender is human
 
@@ -76,25 +76,6 @@ class DatabaseHandler:
             INSERT INTO record (informant, location_lat, location_long)
             VALUES (%s, %s, %s)
             """, (record.informant, record.location_lat, record.location_long)
-        )
-        connection.commit()
-        return record
-
-    def post_elephant_record_by_camera(self, record):
-        """
-        Post the specific record to the db, sender is camera
-
-        Args:
-            record: record to post to db
-
-        Returns:
-            a json record that has been saved to db
-        """
-        cur.execute(
-            """
-            INSERT INTO record (informant)
-            VALUES (%s)
-            """, (record.informant,)
         )
         connection.commit()
         return record

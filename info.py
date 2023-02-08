@@ -9,7 +9,7 @@ db = DatabaseHandler()
 cdb = CameraDatabaseHandler()
 
 
-@router.get("/info")
+@router.get("/elephant-records")
 def get_elephants_records():
     """
     Get the records of elephant from the database
@@ -28,7 +28,7 @@ def get_data_camera():
     return Response(content=data, media_type="application/json")
 
 
-@router.get("/info/{informant_name}")
+@router.get("/elephant-records/{informant_name}")
 def get_specific_record(informant_name):
     """
     Get the specific record of elephant from db using informant_name
@@ -47,20 +47,12 @@ def get_specific_record_from_camera(camera_id):
     return Response(content=response, media_type="application/json")
 
 
-@router.post("/record-by-human")
+@router.post("/record")
 async def post_elephant_record_by_human(record: Record):
     """
     Send a record of elephant to the database
     """
-    return db.post_elephant_record_by_human(record)
-
-
-@router.post("/record-by-camera")
-async def post_elephant_record_by_camera(record: Record):
-    """
-    Send a record of elephant to the database
-    """
-    return db.post_elephant_record_by_camera(record)
+    return db.post_elephant_record(record)
 
 
 @router.post("/info-camera")

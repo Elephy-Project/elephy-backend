@@ -13,7 +13,7 @@ def to_json(params):
         params: response from db in list form
 
     Returns:
-            Response from db in JSON form
+        Response from db in JSON form
     """
     response = []
     for each_record in params:

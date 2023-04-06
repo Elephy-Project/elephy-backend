@@ -12,7 +12,7 @@ app.include_router(info.router)
 origins = [
     "http://localhost",
     "http://localhost:3000",
-    "https://elephy.vercel.app/"
+    "https://elephy.vercel.app"
 ]
 
 app.add_middleware(

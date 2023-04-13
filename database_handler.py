@@ -22,7 +22,8 @@ def to_json(params):
             "datetime": str(each_record[1]),
             "informant": each_record[2],
             "location_lat": each_record[3],
-            "location_long": each_record[4]
+            "location_long": each_record[4],
+            "img_link": each_record[5]
         }
         response.append(record)
     return json.dumps(response)
@@ -63,7 +64,7 @@ class DatabaseHandler:
 
     def post_elephant_record(self, record):
         """
-        Post the specific record to the db, sender is human
+        Post the specific record to the db
 
         Args:
             record: record to post to db
@@ -73,9 +74,9 @@ class DatabaseHandler:
         """
         cur.execute(
             """
-            INSERT INTO record (informant, location_lat, location_long)
-            VALUES (%s, %s, %s)
-            """, (record.informant, record.location_lat, record.location_long)
+            INSERT INTO record (informant, location_lat, location_long, img_link)
+            VALUES (%s, %s, %s, %s)
+            """, (record.informant, record.location_lat, record.location_long, record.img_link)
         )
         connection.commit()
         return record

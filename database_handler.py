@@ -46,7 +46,7 @@ class DatabaseHandler:
 
     def get_specific_record_by_informant(self, informant):
         """
-        Get all records of the informant name whose name is .
+        Get all records of the informant.
 
         Args:
             informant: informant name to get the info

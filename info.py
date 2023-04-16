@@ -1,12 +1,14 @@
 from fastapi import APIRouter, Response
 from database_handler import DatabaseHandler
 from camera_database_handler import CameraDatabaseHandler
+from user_database_handler import UserDatabaseHandler
 from schema import Record, Camera
 
 router = APIRouter()
 
 db = DatabaseHandler()
 cdb = CameraDatabaseHandler()
+udb = UserDatabaseHandler()
 
 
 @router.get("/elephant-records")
@@ -61,3 +63,9 @@ async def post_new_camera(record: Camera):
     Add new camera to database
     """
     return cdb.post_new_camera(record)
+
+
+@router.get("/users/{username}")
+def get_user_from_username(username):
+    response = udb.get_users_by_username(username)
+    return Response(content=response, media_type="application/json")

@@ -1,13 +1,15 @@
 # import uvicorn
 import info
+import authentication
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends
 from fastapi.responses import RedirectResponse
 from fastapi.middleware.cors import CORSMiddleware
 
 
 app = FastAPI()
-app.include_router(info.router)
+app.include_router(authentication.router)
+app.include_router(info.router, dependencies=[Depends(authentication.get_current_active_user)])
 
 origins = [
     "http://localhost",

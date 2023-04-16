@@ -19,13 +19,13 @@ def to_json(params):
         record = {
             "id": each_record[0],
             "username": each_record[1],
-            "hashed_pw": each_record[2]
+            "pwd": each_record[2]
         }
         response.append(record)
     return json.dumps(response)
 
 class UserDatabaseHandler:
-    def get_users_by_username(self, username):
+    def get_users():
         """
         Get a user from their username.
 
@@ -38,7 +38,6 @@ class UserDatabaseHandler:
         cur.execute(
                 """SELECT * 
                     FROM user_db
-                    WHERE username = %s
-                """, (username,)
+                """
             )
         return to_json(cur.fetchall())

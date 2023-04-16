@@ -63,9 +63,3 @@ async def post_new_camera(record: Camera):
     Add new camera to database
     """
     return cdb.post_new_camera(record)
-
-
-@router.get("/users/{username}")
-def get_user_from_username(username):
-    response = udb.get_users_by_username(username)
-    return Response(content=response, media_type="application/json")

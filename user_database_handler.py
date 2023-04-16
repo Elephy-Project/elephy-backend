@@ -37,7 +37,7 @@ class UserDatabaseHandler:
         """
         cur.execute(
                 """SELECT * 
-                    FROM public.user
+                    FROM user_db
                     WHERE username = %s
                 """, (username,)
             )

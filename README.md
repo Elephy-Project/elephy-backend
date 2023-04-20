@@ -1,5 +1,25 @@
 # Elephy Backend
 
+## Set up .env
+```
+Database
+PGUSER
+PGPASSWORD
+PGPORT
+PGDATABASE
+PGHOST
+
+SECRET_KEY
+- Secret key to generate jwt token
+ALGORITHM
+- Algorithm to generate jwt token
+```
+To access to the resources, a user must already recorded in the database with username and hashed password field
+
+Visit `https://elephy-backend.vercel.app/docs`
+
+
+## Run the web application
 ### 1. Create visual environment
 `python3 -m venv env`
 
